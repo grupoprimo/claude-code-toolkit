@@ -141,17 +141,18 @@ dados sensíveis.
 
 ## APIs Que Vamos Integrar
 
-| API | Descrição | Principais Métodos/Endpoints |
-|-----|-----------|------------------------------|
-| `/v1/customers` | Cria e gerencia clientes no Stripe. É onde se associam os métodos de pagamento e dados de cobrança. | `POST /v1/customers`: cria um novo cliente. `GET /v1/customers/:id`: obtém informações de um cliente existente. |
-| `/v1/payment_methods` | Registra e gerencia os métodos de pagamento (cartões, contas bancárias etc.) vinculados a um cliente. | `POST /v1/payment_methods`: cria um método de pagamento. `POST /v1/payment_methods/:id/attach`: vincula ao cliente. |
-| `/v1/setup_intents` | Facilita a configuração de um método de pagamento para uso futuro, especialmente para assinaturas. | `POST /v1/setup_intents`: cria um SetupIntent. `GET /v1/setup_intents/:id`: obtém detalhes do SetupIntent. |
-| `/v1/subscriptions` | Cria, atualiza e cancela assinaturas, vinculando planos, clientes e métodos de pagamento em um fluxo recorrente. | `POST /v1/subscriptions`: cria uma nova assinatura. `DELETE /v1/subscriptions/:id`: cancela assinatura. `GET /v1/subscriptions/:id`: obtém detalhes. |
-| `/v1/prices` | Define e gerencia os planos de cobrança, especificando valores e intervalos (mensal, anual etc.). | `POST /v1/prices`: cria um preço/Plano. `GET /v1/prices`: lista preços existentes. |
-| `/v1/invoices` | Gera faturas para as assinaturas, detalhando valores, descontos, impostos etc. | `GET /v1/invoices`: lista faturas. `GET /v1/invoices/:id`: obtém detalhes de uma fatura específica. |
-| `/v1/webhook_endpoints` | Gerencia os endpoints para receber eventos (ex.: assinatura criada, cancelada, pagamento falhou etc.) | `POST /v1/webhook_endpoints`: cria um endpoint de webhook. `DELETE /v1/webhook_endpoints/:id`: exclui um webhook. |
+| API                     | Descrição                                                                                                        | Principais Métodos/Endpoints                                                                                                                         |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/v1/customers`         | Cria e gerencia clientes no Stripe. É onde se associam os métodos de pagamento e dados de cobrança.              | `POST /v1/customers`: cria um novo cliente. `GET /v1/customers/:id`: obtém informações de um cliente existente.                                      |
+| `/v1/payment_methods`   | Registra e gerencia os métodos de pagamento (cartões, contas bancárias etc.) vinculados a um cliente.            | `POST /v1/payment_methods`: cria um método de pagamento. `POST /v1/payment_methods/:id/attach`: vincula ao cliente.                                  |
+| `/v1/setup_intents`     | Facilita a configuração de um método de pagamento para uso futuro, especialmente para assinaturas.               | `POST /v1/setup_intents`: cria um SetupIntent. `GET /v1/setup_intents/:id`: obtém detalhes do SetupIntent.                                           |
+| `/v1/subscriptions`     | Cria, atualiza e cancela assinaturas, vinculando planos, clientes e métodos de pagamento em um fluxo recorrente. | `POST /v1/subscriptions`: cria uma nova assinatura. `DELETE /v1/subscriptions/:id`: cancela assinatura. `GET /v1/subscriptions/:id`: obtém detalhes. |
+| `/v1/prices`            | Define e gerencia os planos de cobrança, especificando valores e intervalos (mensal, anual etc.).                | `POST /v1/prices`: cria um preço/Plano. `GET /v1/prices`: lista preços existentes.                                                                   |
+| `/v1/invoices`          | Gera faturas para as assinaturas, detalhando valores, descontos, impostos etc.                                   | `GET /v1/invoices`: lista faturas. `GET /v1/invoices/:id`: obtém detalhes de uma fatura específica.                                                  |
+| `/v1/webhook_endpoints` | Gerencia os endpoints para receber eventos (ex.: assinatura criada, cancelada, pagamento falhou etc.)            | `POST /v1/webhook_endpoints`: cria um endpoint de webhook. `DELETE /v1/webhook_endpoints/:id`: exclui um webhook.                                    |
 
 **Observações:**
+
 - Em muitos cenários, utiliza-se também o PaymentIntent (`/v1/payment_intents`) para autorizar e capturar pagamentos únicos; porém, para assinaturas, a maior parte do fluxo gira em torno de `/v1/subscriptions`, `/v1/prices` e `/v1/invoices`.
 - Os métodos de `setup_intents` podem ser necessários quando se quer garantir que um cartão ou conta esteja válido antes de iniciar a cobrança recorrente.
 
@@ -183,29 +184,29 @@ Durante o trial, o sistema receberá webhooks do Stripe para eventos como `custo
 
 ## Solução
 
-| Tarefa | Descrição | Status |
-|--------|-----------|--------|
-| **Setup** | | |
-| Configurar Credenciais do Stripe | Obter as chaves de API (test e live) no painel do Stripe e armazená-las de forma segura (por exemplo, em variáveis de ambiente). | DEFINIDO |
-| Definir Ambiente de Teste (Sandbox) | Preparar a aplicação para utilizar as chaves de teste e endpoints apropriados do Stripe. Vamos usar o ambiente de staging como o teste do Stripe. | DEFINIDO |
-| **Integração - Cliente** | | |
-| Criação de Clientes (Customers) | Implementar a comunicação com a API do Stripe para criar e gerenciar registros de clientes. | DEFINIDO |
-| Busca de Customers | Implementar API que busca customer por email do Stripe. | DEFINIDO |
-| Gerenciamento de Métodos de Pagamento | Utilizar a API de Payment Methods ou SetupIntents para registrar e validar cartões de crédito, carteiras digitais ou contas bancárias. | FORA DE ESCOPO |
-| **Gerenciamento de assinaturas** | | |
-| Criação de Assinaturas (Subscriptions) | Desenvolver o fluxo de criação de planos/preços (Prices) e assinatura (Subscription). | DEFINIDO |
-| Cancelamento de Assinaturas | Implementar endpoints e lógica de negócio para cancelar assinaturas. | DEFINIDO |
-| Integração com Webhooks | Configurar e gerenciar webhooks para receber notificações de eventos do Stripe. | INDEFINIDO |
-| Tratamento de Erros e Falhas de Pagamento | Manusear exceções vindas das APIs do Stripe. | INDEFINIDO |
-| **Extras** | | |
-| Geração de Faturas e Relatórios | Implementar a listagem de invoices (faturas) e relatórios no sistema. | INDEFINIDO |
+| Tarefa                                    | Descrição                                                                                                                                         | Status         |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
+| **Setup**                                 |                                                                                                                                                   |                |
+| Configurar Credenciais do Stripe          | Obter as chaves de API (test e live) no painel do Stripe e armazená-las de forma segura (por exemplo, em variáveis de ambiente).                  | DEFINIDO       |
+| Definir Ambiente de Teste (Sandbox)       | Preparar a aplicação para utilizar as chaves de teste e endpoints apropriados do Stripe. Vamos usar o ambiente de staging como o teste do Stripe. | DEFINIDO       |
+| **Integração - Cliente**                  |                                                                                                                                                   |                |
+| Criação de Clientes (Customers)           | Implementar a comunicação com a API do Stripe para criar e gerenciar registros de clientes.                                                       | DEFINIDO       |
+| Busca de Customers                        | Implementar API que busca customer por email do Stripe.                                                                                           | DEFINIDO       |
+| Gerenciamento de Métodos de Pagamento     | Utilizar a API de Payment Methods ou SetupIntents para registrar e validar cartões de crédito, carteiras digitais ou contas bancárias.            | FORA DE ESCOPO |
+| **Gerenciamento de assinaturas**          |                                                                                                                                                   |                |
+| Criação de Assinaturas (Subscriptions)    | Desenvolver o fluxo de criação de planos/preços (Prices) e assinatura (Subscription).                                                             | DEFINIDO       |
+| Cancelamento de Assinaturas               | Implementar endpoints e lógica de negócio para cancelar assinaturas.                                                                              | DEFINIDO       |
+| Integração com Webhooks                   | Configurar e gerenciar webhooks para receber notificações de eventos do Stripe.                                                                   | INDEFINIDO     |
+| Tratamento de Erros e Falhas de Pagamento | Manusear exceções vindas das APIs do Stripe.                                                                                                      | INDEFINIDO     |
+| **Extras**                                |                                                                                                                                                   |                |
+| Geração de Faturas e Relatórios           | Implementar a listagem de invoices (faturas) e relatórios no sistema.                                                                             | INDEFINIDO     |
 
 ## Riscos
 
-| Risco | Descrição | Possíveis Ações de Mitigação |
-|-------|-----------|------------------------------|
-| Falhas de segurança ou vazamento de dados sensíveis | A exposição de chaves de API ou informações de cartão de crédito pode gerar grandes prejuízos e comprometer a reputação da empresa. | Armazenar as credenciais em um local seguro (ex.: variáveis de ambiente). Revisar periodicamente a conformidade com padrões de segurança (PCI DSS). |
-| Inconsistência no gerenciamento de assinaturas | Falhas na lógica de criação, renovação ou cancelamento podem levar a cobranças incorretas e insatisfação do usuário. | Automatizar testes em cenários de criação, renovação e cancelamento. Utilizar webhooks para manter o status atualizado em tempo real. |
-| Falhas no recebimento e tratamento de Webhooks | Perder eventos importantes (pagamento falhou, disputa aberta etc.) pode gerar inconsistências no status de pagamento. | Garantir alta disponibilidade do endpoint de webhook. Implementar fila de processamento e reenvio automático de eventos não processados. |
-| Dependência de Terceiros (Stripe) | Se o Stripe enfrentar instabilidade ou downtime, o sistema de assinaturas pode ficar indisponível. | Monitorar status do Stripe. Ter plano de contingência para lidar com falhas de serviço (por exemplo, fila de transações pendentes). |
-| Adequação às legislações internacionais (LGPD, GDPR, PSD2) | Atender a diferentes regulações de privacidade e proteção de dados é complexo e requer atualizações frequentes. | Acompanhar mudanças regulatórias. Implementar recursos de conformidade (SCA, DPO, gestão de consentimento). |
+| Risco                                                      | Descrição                                                                                                                           | Possíveis Ações de Mitigação                                                                                                                        |
+| ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Falhas de segurança ou vazamento de dados sensíveis        | A exposição de chaves de API ou informações de cartão de crédito pode gerar grandes prejuízos e comprometer a reputação da empresa. | Armazenar as credenciais em um local seguro (ex.: variáveis de ambiente). Revisar periodicamente a conformidade com padrões de segurança (PCI DSS). |
+| Inconsistência no gerenciamento de assinaturas             | Falhas na lógica de criação, renovação ou cancelamento podem levar a cobranças incorretas e insatisfação do usuário.                | Automatizar testes em cenários de criação, renovação e cancelamento. Utilizar webhooks para manter o status atualizado em tempo real.               |
+| Falhas no recebimento e tratamento de Webhooks             | Perder eventos importantes (pagamento falhou, disputa aberta etc.) pode gerar inconsistências no status de pagamento.               | Garantir alta disponibilidade do endpoint de webhook. Implementar fila de processamento e reenvio automático de eventos não processados.            |
+| Dependência de Terceiros (Stripe)                          | Se o Stripe enfrentar instabilidade ou downtime, o sistema de assinaturas pode ficar indisponível.                                  | Monitorar status do Stripe. Ter plano de contingência para lidar com falhas de serviço (por exemplo, fila de transações pendentes).                 |
+| Adequação às legislações internacionais (LGPD, GDPR, PSD2) | Atender a diferentes regulações de privacidade e proteção de dados é complexo e requer atualizações frequentes.                     | Acompanhar mudanças regulatórias. Implementar recursos de conformidade (SCA, DPO, gestão de consentimento).                                         |

@@ -356,29 +356,30 @@ Then [correct behavior]
 
 ## Glossário
 
-| Termo | Descrição |
-|-------|-----------|
+| Termo     | Descrição                   |
+| --------- | --------------------------- |
 | [Termo 1] | [Definição clara e concisa] |
 | [Termo 2] | [Definição clara e concisa] |
 
 ## Recursos
 
-| Papel | Responsável |
-|-------|-------------|
-| Tech Lead | @[Nome] |
-| PM | @[Nome] |
-| Time | [Nomes] |
+| Papel     | Responsável |
+| --------- | ----------- |
+| Tech Lead | @[Nome]     |
+| PM        | @[Nome]     |
+| Time      | [Nomes]     |
 
 **Links:**
+
 - Figma: [link]
 - Epic: [link do Jira]
 - Documentação externa: [links]
 
 ## APIs / Integrações
 
-| API | Descrição | Principais Endpoints |
-|-----|-----------|---------------------|
-| [API 1] | [O que faz] | `POST /endpoint`, `GET /endpoint/:id` |
+| API     | Descrição   | Principais Endpoints                     |
+| ------- | ----------- | ---------------------------------------- |
+| [API 1] | [O que faz] | `POST /endpoint`, `GET /endpoint/:id`    |
 | [API 2] | [O que faz] | `POST /endpoint`, `DELETE /endpoint/:id` |
 
 ## Fluxo Técnico
@@ -390,27 +391,29 @@ Then [correct behavior]
 3. **[Passo 3]**: [Descrição técnica]
 
 **APIs Envolvidas:**
+
 - [API 1] - [Função]
 - [API 2] - [Função]
 
 **Webhooks/Eventos:**
+
 - `event.name` - [Quando é disparado e o que fazer]
 
 ## Solução
 
-| Tarefa | Descrição | Status |
-|--------|-----------|--------|
-| **Setup** | | |
-| [Tarefa 1] | [Descrição detalhada] | DEFINIDO / INDEFINIDO |
-| [Tarefa 2] | [Descrição detalhada] | DEFINIDO / INDEFINIDO |
-| **Integração** | | |
-| [Tarefa 3] | [Descrição detalhada] | DEFINIDO / INDEFINIDO |
-| [Tarefa 4] | [Descrição detalhada] | FORA DE ESCOPO |
+| Tarefa         | Descrição             | Status                |
+| -------------- | --------------------- | --------------------- |
+| **Setup**      |                       |                       |
+| [Tarefa 1]     | [Descrição detalhada] | DEFINIDO / INDEFINIDO |
+| [Tarefa 2]     | [Descrição detalhada] | DEFINIDO / INDEFINIDO |
+| **Integração** |                       |                       |
+| [Tarefa 3]     | [Descrição detalhada] | DEFINIDO / INDEFINIDO |
+| [Tarefa 4]     | [Descrição detalhada] | FORA DE ESCOPO        |
 
 ## Riscos
 
-| Risco | Descrição | Mitigação |
-|-------|-----------|-----------|
+| Risco     | Descrição           | Mitigação           |
+| --------- | ------------------- | ------------------- |
 | [Risco 1] | [Impacto potencial] | [Ações preventivas] |
 | [Risco 2] | [Impacto potencial] | [Ações preventivas] |
 
