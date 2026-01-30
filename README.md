@@ -58,7 +58,21 @@ mkdir -p ~/.claude/agents
 cp claude-code-toolkit/agents/business-analyst/business-analyst.md ~/.claude/agents/
 ```
 
-### 5. Verificar instalação
+### 5. Configurar MCP Atlassian (Opcional)
+
+Para integração com Jira:
+
+```bash
+# Adicionar servidor MCP
+claude mcp add --transport http atlassian https://mcp.atlassian.com/v1/mcp
+
+# Autenticar (dentro do Claude Code)
+claude
+> /mcp
+# Siga o fluxo OAuth no browser
+```
+
+### 6. Verificar instalação
 
 ```bash
 # Abra o Claude Code - os comandos e agentes estarão disponíveis
@@ -119,7 +133,71 @@ Use o business-analyst agent para criar uma user story para autenticação via G
 
 ### Integração com Jira
 
-O agente está configurado para usar ferramentas MCP do Atlassian (`mcp__atlassian__*`). Para funcionar, você precisa ter o MCP do Jira configurado no seu ambiente.
+O agente `business-analyst` cria issues diretamente no Jira usando Atlassian MCP.
+
+#### Setup Rápido (3 passos)
+
+**1. Adicionar MCP Atlassian**
+
+```bash
+claude mcp add --transport http atlassian https://mcp.atlassian.com/v1/mcp
+```
+
+**2. Autenticar**
+
+```bash
+claude
+> /mcp
+# Selecione "Authenticate" para Atlassian
+# Siga o fluxo OAuth no browser
+```
+
+**3. Verificar**
+
+```bash
+claude
+> Use o business-analyst para listar os projetos do Jira
+```
+
+#### Escopos de Configuração
+
+| Escopo | Comando | Onde salva | Uso |
+|--------|---------|------------|-----|
+| Local (default) | `claude mcp add ...` | `~/.claude.json` | Pessoal, projeto atual |
+| User | `claude mcp add --scope user ...` | `~/.claude.json` | Pessoal, todos projetos |
+| Project | `claude mcp add --scope project ...` | `.mcp.json` | Compartilhado com time |
+
+#### Compartilhando com o Time
+
+Para compartilhar a configuração MCP com todo o time, o repositório já inclui um arquivo `.mcp.json` na raiz. Cada membro do time precisa apenas autenticar via `/mcp`.
+
+#### Cloud ID
+
+O Cloud ID é obtido automaticamente quando você usa o agente. Se precisar manualmente:
+- Via MCP: O agente usa `getAccessibleAtlassianResources`
+- Via browser: https://admin.atlassian.com/ → URL contém o Cloud ID
+
+#### Seleção de Projeto
+
+O agente sempre perguntará em qual projeto criar as issues. Você pode:
+- Especificar no pedido: "criar story no projeto GRAO"
+- Deixar o agente listar os projetos disponíveis e escolher
+
+#### Troubleshooting
+
+| Problema | Solução |
+|----------|---------|
+| "MCP not configured" | Execute: `claude mcp add --transport http atlassian https://mcp.atlassian.com/v1/mcp` |
+| "Authentication failed" | Execute `/mcp` e re-autentique |
+| "No accessible resources" | Verifique permissões da conta Atlassian |
+| "Project not found" | Peça ao agente: "liste os projetos disponíveis" |
+
+#### BDD/Gherkin para Testes
+
+O agente gera acceptance criteria em formato Gherkin com tags (`@e2e`, `@happy-path`, etc.), pronto para:
+- Gerar testes e2e automatizados (Cypress, Playwright)
+- Documentação executável
+- Validação com stakeholders
 
 ## Como Criar Novos Recursos
 
