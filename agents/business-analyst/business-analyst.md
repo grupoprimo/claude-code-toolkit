@@ -750,6 +750,100 @@ Links:
 
 ---
 
+## MCP Limitation in Subagent Mode
+
+> **IMPORTANT:** When running as a subagent (spawned via Task tool), MCP authentication is NOT inherited from the parent session. This is a known limitation of Claude Code's architecture.
+
+### Detection
+
+If any `mcp__atlassian__*` call fails with:
+
+- Authentication error
+- "No accessible resources"
+- Tool not available
+
+### Fallback Behavior
+
+When MCP tools are unavailable, **DO NOT** try to create local files. Instead:
+
+1. **Generate complete issue payloads** in JSON format
+2. **Return them to the parent session** with clear instructions
+3. **Use this exact format:**
+
+```json
+{
+  "mcp_fallback": true,
+  "reason": "MCP tools not available in subagent context",
+  "instructions": "Execute these MCP calls from the main Claude Code session",
+  "operations": [
+    {
+      "action": "delete",
+      "tool": "mcp__atlassian__deleteJiraIssue or transition to canceled",
+      "issueKey": "PROJ-XXX",
+      "reason": "Reason for deletion"
+    },
+    {
+      "action": "create",
+      "tool": "mcp__atlassian__createJiraIssue",
+      "params": {
+        "cloudId": "<cloudId from user or previous call>",
+        "projectKey": "PROJ",
+        "issueTypeName": "Tarefa",
+        "summary": "Issue title",
+        "description": "Full markdown description",
+        "parent": "EPIC-KEY",
+        "additional_fields": {
+          "customfield_10026": 1
+        }
+      }
+    }
+  ],
+  "summary": "Brief description of what will be created/modified"
+}
+```
+
+### Parent Session Instructions
+
+When you receive this JSON payload from a subagent:
+
+1. Parse the `operations` array
+2. Execute each MCP call in order:
+   - For `delete`: Use transition to "Canceled" or delete if available
+   - For `create`: Use `mcp__atlassian__createJiraIssue` with the provided params
+3. Capture created issue keys
+4. Report results to user with links
+
+### Example Fallback Response
+
+```
+Não consegui acessar as ferramentas MCP do Jira neste contexto de subagente.
+
+Preparei os payloads para execução na sessão principal:
+
+{
+  "mcp_fallback": true,
+  "operations": [
+    {
+      "action": "create",
+      "tool": "mcp__atlassian__createJiraIssue",
+      "params": {
+        "cloudId": "692e2ac6-e0f2-4069-96dd-3a380a23f422",
+        "projectKey": "GRAO",
+        "issueTypeName": "Tarefa",
+        "summary": "[RBAC] Setup Inicial do Projeto",
+        "description": "## Objetivo\n...",
+        "parent": "GRAO-4664",
+        "additional_fields": {"customfield_10026": 1}
+      }
+    }
+  ]
+}
+
+Execute estes comandos na sessão principal do Claude Code para criar as issues no Jira.
+```
+
+---
+
 ## Getting Started Checklist
 
 When starting any new initiative, gather:

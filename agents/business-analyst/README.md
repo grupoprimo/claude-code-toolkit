@@ -288,6 +288,38 @@ claude
 > Crie um epic para [sua feature]
 ```
 
+## Limitação: MCP em Subagentes
+
+> **IMPORTANTE:** Quando o agente é executado como subagente (via Task tool), a autenticação MCP **NÃO é herdada** da sessão principal.
+
+### O que acontece?
+
+- Chamadas a `mcp__atlassian__*` falham com erro de autenticação
+- O agente detecta isso e entra em modo fallback
+
+### Comportamento Fallback
+
+Quando MCP não está disponível, o agente:
+
+1. **Não tenta criar arquivos locais**
+2. **Gera payloads JSON** com todas as operações necessárias
+3. **Retorna para a sessão principal** executar
+
+### Como usar o fallback
+
+Quando receber o JSON de fallback do agente:
+
+```json
+{
+  "mcp_fallback": true,
+  "operations": [
+    {"action": "create", "tool": "mcp__atlassian__createJiraIssue", "params": {...}}
+  ]
+}
+```
+
+Execute as operações manualmente na sessão principal do Claude Code, que tem acesso ao MCP autenticado.
+
 ## Dicas de Uso
 
 1. **Seja específico**: Quanto mais contexto você der, melhor o resultado
