@@ -288,6 +288,61 @@ claude
 > Crie um epic para [sua feature]
 ```
 
+## Configuracao de Projeto JIRA (Recomendado)
+
+Para evitar a listagem de projetos a cada sessao e acelerar a criacao de issues, crie um arquivo de configuracao local:
+
+### Criar `.claude/jira-config.json`
+
+```json
+{
+  "cloudId": "seu-cloud-id-aqui",
+  "projectKey": "PROJ",
+  "siteUrl": "https://site.atlassian.net",
+  "issueTypes": {
+    "epic": "Epic",
+    "story": "Story",
+    "task": "Tarefa",
+    "subtask": "Sub-tarefa",
+    "bug": "Bug"
+  },
+  "defaults": {
+    "parentEpic": null,
+    "labels": [],
+    "components": []
+  }
+}
+```
+
+### Como obter o cloudId
+
+Execute na sessao Claude Code:
+
+```
+mcp__atlassian__getAccessibleAtlassianResources
+```
+
+Copie o valor do campo `id` do resultado.
+
+### Como obter os issueTypes
+
+Execute na sessao Claude Code:
+
+```
+mcp__atlassian__getJiraProjectIssueTypesMetadata(cloudId, projectKey)
+```
+
+Os nomes dos tipos podem variar por projeto (ex: "Task" vs "Tarefa").
+
+### Beneficios
+
+| Sem Config                   | Com Config                     |
+| ---------------------------- | ------------------------------ |
+| Lista projetos toda vez      | Usa projeto direto             |
+| ~5 chamadas MCP por operacao | ~1-2 chamadas MCP por operacao |
+| Latencia adicional           | Resposta mais rapida           |
+| Precisa especificar projeto  | Projeto ja configurado         |
+
 ## Limitação: MCP em Subagentes
 
 > **IMPORTANTE:** Quando o agente é executado como subagente (via Task tool), a autenticação MCP **NÃO é herdada** da sessão principal.
@@ -328,10 +383,19 @@ Execute as operações manualmente na sessão principal do Claude Code, que tem 
 4. **Use para refinement**: O agente pode melhorar stories existentes
 5. **Bulk creation**: Peça epic + stories de uma vez para manter o link
 
-## Arquivos de Referência
+## Arquivos de Referencia
 
-| Arquivo                                   | Conteúdo                                             |
-| ----------------------------------------- | ---------------------------------------------------- |
-| `business-analyst.md`                     | Definição completa do agente (templates, guidelines) |
-| `references/tdd-example.md`               | Exemplo de TDD de integração Stripe                  |
-| `references/jira-integration-examples.md` | Exemplos de uso com Jira                             |
+| Arquivo                                   | Conteudo                                     |
+| ----------------------------------------- | -------------------------------------------- |
+| `business-analyst.md`                     | Definicao do agente (otimizado, ~250 linhas) |
+| `references/tdd-example.md`               | Exemplo de TDD de integracao Stripe          |
+| `references/jira-integration-examples.md` | Exemplos de uso com Jira                     |
+| `references/templates/epic.md`            | Template de Epic                             |
+| `references/templates/story.md`           | Template de User Story com Gherkin           |
+| `references/templates/bug.md`             | Template de Bug Report                       |
+| `references/templates/task.md`            | Template de Task/Sub-task                    |
+| `references/templates/spike.md`           | Template de Spike/Research                   |
+| `references/templates/sprint.md`          | Template de Sprint Planning                  |
+| `references/templates/tdd.md`             | Template de Technical Design Document        |
+
+> **Nota:** Os templates sao carregados sob demanda (lazy loading) para reduzir o consumo de tokens.
