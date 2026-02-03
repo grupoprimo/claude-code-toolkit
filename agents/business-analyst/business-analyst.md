@@ -164,7 +164,6 @@ Feature: [Feature name matching story title]
 **Priority:** Must Have / Should Have / Could Have / Won't Have
 **Dependencies:** [US-XXX, US-YYY]
 **Parent Epic:** [EPIC-XXX]
-
 ````
 
 ---
@@ -180,24 +179,29 @@ Feature: [Feature name matching story title]
 **Reported By:** [Name] | **Date:** [YYYY-MM-DD]
 
 ### Summary
+
 [One-line description]
 
 ### Steps to Reproduce
+
 1. [Step 1]
 2. [Step 2]
 3. [Step 3]
 
 ### Expected Behavior
+
 [What should happen]
 
 ### Actual Behavior
+
 [What actually happens]
 
 ### Evidence
+
 - **Screenshots/Video:** [Link]
 - **Browser/Device:** [e.g., Chrome 120, iPhone 15]
 - **Error Logs:**
-````
+```
 
 [Relevant logs]
 
@@ -568,6 +572,7 @@ RICE = (Reach × Impact × Confidence) / Effort
 ### Primary Mode: Jira (via MCP) - PREFERRED
 
 When Atlassian MCP is configured, create issues directly in Jira:
+
 - Issues created with full BDD acceptance criteria
 - Automatic linking between epics/stories
 - Real-time collaboration with team
@@ -575,6 +580,7 @@ When Atlassian MCP is configured, create issues directly in Jira:
 ### Fallback Mode: Local Markdown
 
 When MCP not available or user prefers local files:
+
 - **Jira**: Jira markdown, custom fields noted
 - **Linear**: Linear markdown format
 - **GitHub Issues**: GFM with labels/milestones
@@ -600,12 +606,12 @@ Then authenticate via `/mcp` command in Claude CLI.
 
 Execute these steps in order:
 
-| Step | Tool | Purpose |
-|------|------|---------|
-| 1 | `mcp__atlassian__getAccessibleAtlassianResources` | Get cloudId |
-| 2 | `mcp__atlassian__getVisibleJiraProjects` | List available projects |
-| 3 | **ASK USER** | Which project to use? |
-| 4 | `mcp__atlassian__getJiraProjectIssueTypesMetadata` | Get available issue types |
+| Step | Tool                                               | Purpose                   |
+| ---- | -------------------------------------------------- | ------------------------- |
+| 1    | `mcp__atlassian__getAccessibleAtlassianResources`  | Get cloudId               |
+| 2    | `mcp__atlassian__getVisibleJiraProjects`           | List available projects   |
+| 3    | **ASK USER**                                       | Which project to use?     |
+| 4    | `mcp__atlassian__getJiraProjectIssueTypesMetadata` | Get available issue types |
 
 ### Project Selection (REQUIRED)
 
@@ -618,6 +624,7 @@ Execute these steps in order:
 2. **If user did NOT specify project**:
    - List available projects: `mcp__atlassian__getVisibleJiraProjects`
    - Present options to user:
+
    ```
    Encontrei os seguintes projetos no Jira:
 
@@ -627,17 +634,18 @@ Execute these steps in order:
 
    Em qual projeto deseja criar a issue?
    ```
+
    - Wait for user response before proceeding
 
 3. **Store selected project** for subsequent operations in the same session
 
 ### Mode Selection
 
-| User Intent | Mode |
-|-------------|------|
+| User Intent                                | Mode             |
+| ------------------------------------------ | ---------------- |
 | "criar no Jira", "ticket", "issue", "Jira" | Jira Integration |
-| "local", "markdown", "arquivo" | Local Markdown |
-| Ambiguous | ASK user |
+| "local", "markdown", "arquivo"             | Local Markdown   |
+| Ambiguous                                  | ASK user         |
 
 ### Creating Issues in Jira
 
@@ -657,7 +665,7 @@ Parameters:
 
 #### Story (with BDD Acceptance Criteria)
 
-```
+````
 Tool: mcp__atlassian__createJiraIssue
 Parameters:
 {
@@ -668,11 +676,11 @@ Parameters:
   "description": "**As a** [persona]\n**I want** [goal]\n**So that** [benefit]\n\n## Acceptance Criteria\n\n```gherkin\nFeature: [Feature name]\n\n  @e2e @happy-path\n  Scenario: [Happy path]\n    Given [precondition]\n    When [action]\n    Then [outcome]\n```",
   "parent": "<epic-key>" // optional
 }
-```
+````
 
 #### Bug
 
-```
+````
 Tool: mcp__atlassian__createJiraIssue
 Parameters:
 {
@@ -682,7 +690,7 @@ Parameters:
   "summary": "Bug Title",
   "description": "## Summary\n[description]\n\n## Steps to Reproduce\n1. [step]\n\n## Expected vs Actual\n- Expected: [expected]\n- Actual: [actual]\n\n## Acceptance Criteria (Fix Verification)\n```gherkin\n@e2e @regression\nScenario: [verification]\n  Given [precondition]\n  When [action]\n  Then [fixed behavior]\n```"
 }
-```
+````
 
 #### Task / Sub-task
 
@@ -722,23 +730,23 @@ Links:
 
 ### Querying and Updating Jira
 
-| Action | Tool |
-|--------|------|
-| Search issues | `mcp__atlassian__searchJiraIssuesUsingJql` |
-| Get issue details | `mcp__atlassian__getJiraIssue` |
-| Add comment | `mcp__atlassian__addCommentToJiraIssue` |
-| Transition status | `mcp__atlassian__transitionJiraIssue` |
-| Update fields | `mcp__atlassian__editJiraIssue` |
+| Action            | Tool                                       |
+| ----------------- | ------------------------------------------ |
+| Search issues     | `mcp__atlassian__searchJiraIssuesUsingJql` |
+| Get issue details | `mcp__atlassian__getJiraIssue`             |
+| Add comment       | `mcp__atlassian__addCommentToJiraIssue`    |
+| Transition status | `mcp__atlassian__transitionJiraIssue`      |
+| Update fields     | `mcp__atlassian__editJiraIssue`            |
 
 ### Error Handling
 
-| Error | Solution |
-|-------|----------|
+| Error                     | Solution                                                                                                      |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | "No accessible resources" | Run: `claude mcp add --transport http atlassian https://mcp.atlassian.com/v1/mcp` then `/mcp` to authenticate |
-| "Project not found" | Use `getVisibleJiraProjects` to list available projects |
-| "Issue type not found" | Use `getJiraProjectIssueTypesMetadata` to see available types |
-| "Permission denied" | Check Jira project permissions for your account |
-| "Parent issue not found" | Verify parent key exists with `getJiraIssue` |
+| "Project not found"       | Use `getVisibleJiraProjects` to list available projects                                                       |
+| "Issue type not found"    | Use `getJiraProjectIssueTypesMetadata` to see available types                                                 |
+| "Permission denied"       | Check Jira project permissions for your account                                                               |
+| "Parent issue not found"  | Verify parent key exists with `getJiraIssue`                                                                  |
 
 ---
 
