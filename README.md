@@ -83,9 +83,10 @@ claude
 
 ### Commands
 
-| Comando       | Descrição                                                   | Autor           |
-| ------------- | ----------------------------------------------------------- | --------------- |
-| `/pr-creator` | Cria descrições de PR e mensagens de review automaticamente | @gbrl-coelho-gp |
+| Comando         | Descrição                                                                                   | Autor           |
+| --------------- | ------------------------------------------------------------------------------------------- | --------------- |
+| `/pr-creator`   | Cria descrições de PR e mensagens de review automaticamente                                 | @gbrl-coelho-gp |
+| `/smart-commit` | Analisa mudanças, agrupa em commits lógicos e gera mensagens Conventional Commits com emoji | @gbrl-coelho-gp |
 
 ### Agents
 
@@ -161,11 +162,11 @@ claude
 
 #### Escopos de Configuração
 
-| Escopo | Comando | Onde salva | Uso |
-|--------|---------|------------|-----|
-| Local (default) | `claude mcp add ...` | `~/.claude.json` | Pessoal, projeto atual |
-| User | `claude mcp add --scope user ...` | `~/.claude.json` | Pessoal, todos projetos |
-| Project | `claude mcp add --scope project ...` | `.mcp.json` | Compartilhado com time |
+| Escopo          | Comando                              | Onde salva       | Uso                     |
+| --------------- | ------------------------------------ | ---------------- | ----------------------- |
+| Local (default) | `claude mcp add ...`                 | `~/.claude.json` | Pessoal, projeto atual  |
+| User            | `claude mcp add --scope user ...`    | `~/.claude.json` | Pessoal, todos projetos |
+| Project         | `claude mcp add --scope project ...` | `.mcp.json`      | Compartilhado com time  |
 
 #### Compartilhando com o Time
 
@@ -174,27 +175,30 @@ Para compartilhar a configuração MCP com todo o time, o repositório já inclu
 #### Cloud ID
 
 O Cloud ID é obtido automaticamente quando você usa o agente. Se precisar manualmente:
+
 - Via MCP: O agente usa `getAccessibleAtlassianResources`
 - Via browser: https://admin.atlassian.com/ → URL contém o Cloud ID
 
 #### Seleção de Projeto
 
 O agente sempre perguntará em qual projeto criar as issues. Você pode:
+
 - Especificar no pedido: "criar story no projeto GRAO"
 - Deixar o agente listar os projetos disponíveis e escolher
 
 #### Troubleshooting
 
-| Problema | Solução |
-|----------|---------|
-| "MCP not configured" | Execute: `claude mcp add --transport http atlassian https://mcp.atlassian.com/v1/mcp` |
-| "Authentication failed" | Execute `/mcp` e re-autentique |
-| "No accessible resources" | Verifique permissões da conta Atlassian |
-| "Project not found" | Peça ao agente: "liste os projetos disponíveis" |
+| Problema                  | Solução                                                                               |
+| ------------------------- | ------------------------------------------------------------------------------------- |
+| "MCP not configured"      | Execute: `claude mcp add --transport http atlassian https://mcp.atlassian.com/v1/mcp` |
+| "Authentication failed"   | Execute `/mcp` e re-autentique                                                        |
+| "No accessible resources" | Verifique permissões da conta Atlassian                                               |
+| "Project not found"       | Peça ao agente: "liste os projetos disponíveis"                                       |
 
 #### BDD/Gherkin para Testes
 
 O agente gera acceptance criteria em formato Gherkin com tags (`@e2e`, `@happy-path`, etc.), pronto para:
+
 - Gerar testes e2e automatizados (Cypress, Playwright)
 - Documentação executável
 - Validação com stakeholders
